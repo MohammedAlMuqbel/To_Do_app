@@ -6,7 +6,7 @@ def get_to_do(filepath="Data.txt"):
     return to_do
 
 
-def write_to_do(filepath, y):
+def write_to_do(y,filepath="Data.txt" ):
     """ Write the to_do items list
     in the text file"""
     with open(filepath, 'w') as file_1:

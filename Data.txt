@@ -3,3 +3,5 @@ change car oil
 get grocry
 play
 code
+clean the house
+code python
