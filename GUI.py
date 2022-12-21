@@ -7,9 +7,13 @@ add_button=PySimpleGUI.Button("Add")
 list_box=PySimpleGUI.Listbox(values=functions.get_to_do(),key='item',
                              enable_events=True,size=[45,10])
 edit_button=PySimpleGUI.Button("Edit")
+complete_button=PySimpleGUI.Button("Complete")
+exit_button=PySimpleGUI.Button("Exit")
 
 window=PySimpleGUI.Window('To_do_list'
-                          ,layout=[[label],[input_box,add_button],[list_box,edit_button]],
+                          ,layout=[[label],[input_box,add_button],
+                                   [list_box,edit_button,complete_button],
+                                   [exit_button]],
                           font=('Helvetica',15))
 
 while True:
@@ -24,7 +28,6 @@ while True:
             functions.write_to_do(to_do)
             window['item'].update(values=to_do)
 
-
         case "Edit":
             todo_edit=values["item"][0]
             new_todo=values["To_do"]
@@ -34,6 +37,16 @@ while True:
             functions.write_to_do(get_to_do)
             window['item'].update(values=get_to_do)
 
+        case "Complete":
+            to_do_complete=values["item"][0]
+            todos=functions.get_to_do()
+            todos.remove(to_do_complete)
+            functions.write_to_do(todos)
+            window["item"].update(values=todos)
+            window["To_do"].update(value='')
+
+        case"Exit":
+            break
         case "item":
             window["To_do"].update(value=values["item"][0])
 
