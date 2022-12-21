@@ -1,6 +1,9 @@
 import functions
 import PySimpleGUI
+import time
 
+PySimpleGUI.theme("LightBrown1")
+clock=PySimpleGUI.Text('',key="Clock")
 label=PySimpleGUI.Text("Please Add a Task")
 input_box=PySimpleGUI.InputText(tooltip="Enter a Task",key="To_do")
 add_button=PySimpleGUI.Button("Add")
@@ -11,15 +14,16 @@ complete_button=PySimpleGUI.Button("Complete")
 exit_button=PySimpleGUI.Button("Exit")
 
 window=PySimpleGUI.Window('To_do_list'
-                          ,layout=[[label],[input_box,add_button],
+                          ,layout=[[clock],
+                                   [label],[input_box,add_button],
                                    [list_box,edit_button,complete_button],
                                    [exit_button]],
                           font=('Helvetica',15))
 
 while True:
-    event,values=window.read()
-    print(1,event)
-    print(2,values)
+    event,values=window.read(timeout=10)
+    window["Clock"].update(value=time.strftime("%b-%d,%Y,%H:%M:%S"))
+
     match event:
         case "Add":
             to_do=functions.get_to_do()
@@ -29,21 +33,27 @@ while True:
             window['item'].update(values=to_do)
 
         case "Edit":
-            todo_edit=values["item"][0]
-            new_todo=values["To_do"]
-            get_to_do=functions.get_to_do()
-            index=get_to_do.index(todo_edit)
-            get_to_do[index]=new_todo
-            functions.write_to_do(get_to_do)
-            window['item'].update(values=get_to_do)
+            try:
+                todo_edit=values["item"][0]
+                new_todo=values["To_do"]
+                get_to_do=functions.get_to_do()
+                index=get_to_do.index(todo_edit)
+                get_to_do[index]=new_todo
+                functions.write_to_do(get_to_do)
+                window['item'].update(values=get_to_do)
+            except IndexError:
+                PySimpleGUI.popup("please select a task first",font=("Helvetica",15))
 
         case "Complete":
-            to_do_complete=values["item"][0]
-            todos=functions.get_to_do()
-            todos.remove(to_do_complete)
-            functions.write_to_do(todos)
-            window["item"].update(values=todos)
-            window["To_do"].update(value='')
+            try:
+                to_do_complete=values["item"][0]
+                todos=functions.get_to_do()
+                todos.remove(to_do_complete)
+                functions.write_to_do(todos)
+                window["item"].update(values=todos)
+                window["To_do"].update(value='')
+            except IndexError:
+                PySimpleGUI.popup("please select a task first",font=("Helvetica",15))
 
         case"Exit":
             break
