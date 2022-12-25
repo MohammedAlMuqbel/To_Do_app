@@ -1,12 +1,17 @@
 import functions
 import PySimpleGUI
 import time
+import os
+
+if not os.path.exists("Data.txt"):
+    with open ("Data.txt","w") as file:
+        pass
 
 PySimpleGUI.theme("LightBrown1")
 clock=PySimpleGUI.Text('',key="Clock")
 label=PySimpleGUI.Text("Please Add a Task")
 input_box=PySimpleGUI.InputText(tooltip="Enter a Task",key="To_do")
-add_button=PySimpleGUI.Button("Add")
+add_button=PySimpleGUI.Button("Add",size=10)
 list_box=PySimpleGUI.Listbox(values=functions.get_to_do(),key='item',
                              enable_events=True,size=[45,10])
 edit_button=PySimpleGUI.Button("Edit")
